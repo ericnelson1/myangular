@@ -1,0 +1,41 @@
+{
+  "name": "myangular",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "karma start",
+    "lint": "jshint src test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericnelson1/myangular.git"
+  },
+  "keywords": [],
+  "author": "Eric Nelson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericnelson1/myangular/issues"
+  },
+  "homepage": "https://github.com/ericnelson1/myangular#readme",
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "jasmine-core": "^2.4.1",
+    "jshint": "^2.9.2",
+    "karma": "^1.1.0",
+    "karma-browserify": "^5.0.5",
+    "karma-jasmine": "^1.0.2",
+    "karma-jshint-preprocessor": "0.0.6",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "phantomjs-prebuilt": "^2.1.7",
+    "sinon": "^1.17.4",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "lodash": "^4.13.1"
+  }
+}
