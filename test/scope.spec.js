@@ -327,11 +327,57 @@ describe('Scope', function(){
       scope.$digest();
       expect(scope.counter).toBe(0);
     });
+  });
 
+  describe('$eval', function() {
+    var scope;
 
+    beforeEach(function() {
+      scope = new Scope();
+    });
 
+    it('executes evaled function and returns result', function() {
+      scope.aValue = 12;
+      var result = scope.$eval(function(scope) { return scope.aValue; });
+      expect(result).toBe(12);
+    });
+
+    it('passes second argument through', function() {
+      var result = scope.$eval(function(scope, arg) { return arg; }, 23);
+      expect(result).toBe(23);
+    });
+  });
+
+  describe('$apply', function() {
+    var scope;
+
+    beforeEach(function() {
+      scope = new Scope();
+    });
+
+    it('executes a function and starts digest', function() {
+      scope.aValue = 'somevalue';
+      scope.counter = 0;
+
+      scope.$watch(
+        function(scope) { return scope.aValue; },
+        function(newValue, oldValue, scope) { scope.counter++; }
+      );
+
+      scope.$digest();
+      expect(scope.counter).toBe(1);
+
+      scope.$apply(
+        function(scope) { scope.aValue = 'anothervalue'; }
+      );
+
+      expect(scope.counter).toBe(2);
+    });
 
   });
+
+
+
 
 });
 
