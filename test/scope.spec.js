@@ -621,6 +621,94 @@ describe('Scope', function() {
     });
   });
 
+  describe('inheritance', function() {
+    it('inherits parent properties', function() {
+      var parent = new Scope();
+      parent.aValue = [1,2,3];
+      var child = parent.$new();
+      expect(child.aValue).toEqual([1,2,3]);
+    });
+
+    it('does not inherit child properties', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      child.aValue = [1,2,3];
+      expect(parent.aValue).toBeUndefined();
+    });
+
+    it('inherits parent properties whenever they are defined', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.aValue = [1,2,3];
+      expect(child.aValue).toEqual([1,2,3]);
+    });
+
+    it('can manipulate parent properties', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.aValue = [1,2,3];
+      child.aValue.push(4);
+      expect(parent.aValue).toEqual([1,2,3,4]);
+      expect(child.aValue).toEqual([1,2,3,4]);
+    });
+
+    it('can watch parent properties', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.aValue = [1,2,3];
+      child.counter = 0;
+
+      child.$watch(
+        function(scope) { return scope.aValue; },
+        function(newValue, oldValue, scope) {
+          scope.counter++;
+        }, true
+      );
+
+      child.$digest();
+      expect(child.counter).toBe(1);
+      parent.aValue.push(4);
+      child.$digest();
+      expect(child.counter).toBe(2);
+    });
+
+    it('shadows a parent property with the same name', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.name = 'Dad';
+      child.name = 'Kid';
+      expect(parent.name).toBe('Dad');
+      expect(child.name).toBe('Kid');
+    });
+
+    // always have a dot in ng-model
+    it('doesnt shadow parent property', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.user = { name: 'Dad' };
+      child.user.name = 'Kid';
+      expect(parent.user.name).toBe('Kid');
+      expect(child.user.name).toBe('Kid');
+    });
+
+    it('does not digest its parent', function() {
+      var parent = new Scope();
+      var child = parent.$new();
+      parent.aValue = 'abc';
+
+      parent.$watch(
+        function(scope) { return scope.aValue; },
+        function(newValue, oldValue, scope) {
+          scope.aValueWas = newValue;
+        }
+      );  
+
+      child.$digest();
+      expect(scope.aValueWas).toBeUndefined();
+    });
+
+  });
+
 });
 
 
